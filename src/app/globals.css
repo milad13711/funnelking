@@ -2,27 +2,27 @@
 @import "@fontsource-variable/vazirmatn/wght.css";
 
 :root {
-  /* زمینه‌ی اصلی سفید؛ پالت برند: سبز اصلی 254C41 و طلایی B49B6D */
+  /* پالت برگرفته‌ی دقیق از جلد کتاب: سرمه‌ای/نیلی تیره + طلایی — نمونه‌برداری شده از تصویر جلد */
   --background: #ffffff;
-  --foreground: #1a362e;
+  --foreground: #171933;
 
-  --color-ink: #1a362e;
-  --color-ink-soft: #3f564e;
-  --color-muted: #62766f;
+  --color-ink: #171933;
+  --color-ink-soft: #3d4272;
+  --color-muted: #6b6f96;
   --color-surface: #ffffff;
-  --color-border: #e4e9e6;
+  --color-border: #e6e7f2;
 
-  --color-primary: #254c41;
-  --color-primary-dark: #1a362e;
-  --color-primary-deep: #17302a;
-  --color-primary-light: #3d6b5c;
-  --color-primary-soft: #eaf0ed;
+  --color-primary: #23264a;
+  --color-primary-dark: #171933;
+  --color-primary-deep: #101124;
+  --color-primary-light: #3d4272;
+  --color-primary-soft: #edeef8;
 
-  --color-accent: #254c41;
-  --color-accent-soft: #f6f2e9;
-  --color-gold: #b49b6d;
-  --color-gold-light: #c9b48c;
-  --color-gold-dark: #96805a;
+  --color-accent: #23264a;
+  --color-accent-soft: #f8f0db;
+  --color-gold: #c9a24a;
+  --color-gold-light: #e2c37a;
+  --color-gold-dark: #9c7a30;
 
   --color-warning: #8a5a00;
   --color-warning-soft: #f6efc4;
@@ -117,15 +117,15 @@ h1, h2, h3 { text-wrap: balance; }
 }
 .card-lift:hover {
   transform: translateY(-3px);
-  border-color: rgba(37, 76, 65, 0.35);
-  box-shadow: 0 24px 48px -28px rgba(26, 54, 46, 0.35);
+  border-color: rgba(35, 38, 74, 0.35);
+  box-shadow: 0 24px 48px -28px rgba(16, 17, 36, 0.35);
 }
 
-.elev-1 { box-shadow: 0 1px 2px rgba(26, 54, 46, 0.05), 0 8px 24px -16px rgba(26, 54, 46, 0.18); }
-.elev-2 { box-shadow: 0 2px 4px rgba(26, 54, 46, 0.05), 0 24px 56px -28px rgba(26, 54, 46, 0.35); }
+.elev-1 { box-shadow: 0 1px 2px rgba(16, 17, 36, 0.05), 0 8px 24px -16px rgba(16, 17, 36, 0.18); }
+.elev-2 { box-shadow: 0 2px 4px rgba(16, 17, 36, 0.05), 0 24px 56px -28px rgba(16, 17, 36, 0.35); }
 
 .bg-dots {
-  background-image: radial-gradient(rgba(37, 76, 65, 0.09) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(201, 162, 74, 0.14) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
@@ -145,7 +145,7 @@ h1, h2, h3 { text-wrap: balance; }
 .hero-band {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #17302a 0%, #1e3f36 55%, #254c41 100%);
+  background: linear-gradient(135deg, #0d0e1f 0%, #171a3a 55%, #23264a 100%);
   color: #fff;
 }
 .hero-band::after {
@@ -155,4 +155,16 @@ h1, h2, h3 { text-wrap: balance; }
   bottom: 0;
   height: 3px;
   background: var(--color-gold);
+}
+
+.badge-soon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  background: var(--color-accent-soft);
+  color: var(--color-gold-dark);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.7rem;
 }

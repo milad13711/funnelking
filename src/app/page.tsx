@@ -1,4 +1,7 @@
 import { BuyBox } from "@/components/BuyBox";
+import { ExercisesSection } from "@/components/ExercisesSection";
+import { EventsSection } from "@/components/EventsSection";
+import { GameSection } from "@/components/GameSection";
 import {
   AUDIENCE,
   BRAND,
@@ -102,6 +105,9 @@ export default function HomePage() {
         </ol>
       </section>
 
+      {/* بوم‌های تمرین پایان فصل */}
+      <ExercisesSection />
+
       {/* پیش‌نمایش فصل اول */}
       <section id="first-chapter" className="bg-primary-soft/40 py-16">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
@@ -117,6 +123,12 @@ export default function HomePage() {
           </a>
         </div>
       </section>
+
+      {/* رویدادهای فانل کینگ */}
+      <EventsSection />
+
+      {/* بازی آنلاین فانل کینگ */}
+      <GameSection />
 
       {/* برای چه کسب‌وکارهایی */}
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">

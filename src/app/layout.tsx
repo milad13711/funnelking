@@ -32,12 +32,17 @@ export const metadata: Metadata = {
     images: ["/og-cover.png"],
   },
   icons: {
-    icon: [{ url: "/favicon.ico" }],
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#17302a",
+  themeColor: "#171933",
   width: "device-width",
   initialScale: 1,
 };

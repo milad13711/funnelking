@@ -135,3 +135,36 @@ export const FAQ = [
 export const FIRST_CHAPTER_TEASER = `اگر قرار باشد تمام مدیریت استراتژیک را در یک جمله فشرده کنیم، شاید این جمله از همه دقیق‌تر باشد: استراتژی یعنی تصمیم گرفتن زیر فشار، با منابع محدود، در شرایطی که نمی‌توان همه گزینه‌های خوب را هم‌زمان داشت.
 
 بیشتر آدم‌ها استراتژی را با برنامه‌ریزی بلندمدت اشتباه می‌گیرند... اما در دنیای واقعی، استراتژی هیچ‌کدام از این‌ها نیست.`;
+
+export interface ChapterExercise {
+  chapterLabel: string; // «بخش یکم» تا «بخش یازدهم»
+  title: string;
+  available: boolean;
+  href?: string;
+}
+
+export const CHAPTER_EXERCISES: ChapterExercise[] = [
+  { chapterLabel: "بخش یکم", title: "بوم DNA تفکر استراتژیک", available: true, href: "/tools/strategic-dna" },
+  { chapterLabel: "بخش دوم", title: "بوم بازیِ بازار", available: false },
+  { chapterLabel: "بخش سوم", title: "بوم مهندسی قیف فروش", available: false },
+  { chapterLabel: "بخش چهارم", title: "بوم محصول و ارزش پیشنهادی", available: false },
+  { chapterLabel: "بخش پنجم", title: "بوم مدل کسب‌وکار و پول", available: false },
+  { chapterLabel: "بخش ششم", title: "بوم عملیات و ظرفیت", available: false },
+  { chapterLabel: "بخش هفتم", title: "بوم سازمان و تصمیم‌گیری", available: false },
+  { chapterLabel: "بخش هشتم", title: "بوم استراتژی ورود به بازار", available: false },
+  { chapterLabel: "بخش نهم", title: "بوم بحران و ضدشکنندگی", available: false },
+  { chapterLabel: "بخش دهم", title: "بوم روایت آموزشیِ سلطان قیف", available: false },
+  { chapterLabel: "بخش یازدهم", title: "بوم دستورکارها و ابزارها", available: false },
+];
+
+export const GAME_INFO = {
+  title: "بازی آنلاین Funnel King",
+  description:
+    "همان مفاهیم کتاب را در یک بازار شبیه‌سازی‌شده تجربه کنید: تصمیم بگیرید، بودجه مدیریت کنید، تبلیغات انجام دهید، CRM بسازید، مشتری جذب کنید و به بحران‌های بازار واکنش نشان دهید. برنده‌ی واقعی بازار کسی نیست که فقط بیشتر بفروشد؛ برنده کسی است که بهتر سیستم بسازد.",
+};
+
+export const EVENTS_INFO = {
+  title: "رویدادهای Funnel King",
+  description:
+    "اطلاع‌رسانی و ثبت‌نام رویدادهای Funnel King همین‌جا انجام می‌شود؛ رزرو هر رویداد از طریق ماژول رویدادهای Exir ERP انجام می‌شود.",
+};
