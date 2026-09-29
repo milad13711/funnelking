@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BuyBox } from "@/components/BuyBox";
 import { ExercisesSection } from "@/components/ExercisesSection";
 import { EventsSection } from "@/components/EventsSection";
@@ -39,7 +40,7 @@ export default function HomePage() {
                 خرید از funnelking.ir
               </a>
               <a
-                href="#first-chapter"
+                href="/chapter-one"
                 className="rounded-full border border-white/30 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10"
               >
                 خواندن رایگان فصل اول
@@ -112,15 +113,13 @@ export default function HomePage() {
       <section id="first-chapter" className="bg-primary-soft/40 py-16">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
           <h2 className="text-2xl font-black text-primary sm:text-3xl">فصل اول را رایگان بخوانید</h2>
-          <p className="mt-6 whitespace-pre-line text-right text-sm leading-8 text-ink-soft sm:text-base">
-            {FIRST_CHAPTER_TEASER}
-          </p>
-          <a
-            href="#buy"
+          <p className="mt-6 text-right text-sm leading-8 text-ink-soft sm:text-base">{FIRST_CHAPTER_TEASER}</p>
+          <Link
+            href="/chapter-one"
             className="mt-6 inline-block rounded-full bg-primary px-6 py-3 text-sm font-bold text-white transition hover:bg-primary-dark"
           >
-            ادامه‌ی فصل اول در کتاب کامل
-          </a>
+            خواندن کامل پیش‌گفتار و پیش‌درآمد
+          </Link>
         </div>
       </section>
 
