@@ -56,12 +56,11 @@ export function BuyBox() {
     setLoading(true);
     setStep("submitting");
     try {
-      const { token } = await verifyOtp(phone.trim(), otp.trim());
+      const { bookingToken } = await verifyOtp(phone.trim(), otp.trim());
       const { orderId } = await createOrder({
-        token,
+        bookingToken,
         format,
-        name: name.trim(),
-        phone: phone.trim(),
+        buyerName: name.trim(),
         address: product.needsShipping ? address.trim() : undefined,
         postalCode: product.needsShipping ? postalCode.trim() : undefined,
       });

@@ -5,6 +5,13 @@ const TENANT_SLUG = process.env.NEXT_PUBLIC_TENANT_SLUG ?? "t63724ac4c3f";
 
 const BOOK_API = `${API_BASE}/public/book/${TENANT_SLUG}`;
 
+// Frontend product ids are lowercase for readability; the backend's BookOrderFormat enum is uppercase.
+const FORMAT_CODE: Record<ProductFormat, "PRINT" | "EBOOK" | "AUDIO"> = {
+  print: "PRINT",
+  ebook: "EBOOK",
+  audio: "AUDIO",
+};
+
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BOOK_API}${path}`, {
     ...init,
@@ -12,7 +19,8 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   });
   if (!res.ok) {
     const body = await res.json().catch(() => null);
-    throw new Error(body?.message ?? `خطا در ارتباط با سرور (${res.status})`);
+    const message = Array.isArray(body?.message) ? body.message.join("، ") : body?.message;
+    throw new Error(message ?? `خطا در ارتباط با سرور (${res.status})`);
   }
   return res.json();
 }
@@ -25,17 +33,16 @@ export function requestOtp(phone: string) {
 }
 
 export function verifyOtp(phone: string, code: string) {
-  return apiFetch<{ token: string }>("/otp/verify", {
+  return apiFetch<{ bookingToken: string; expiresInSeconds: number }>("/otp/verify", {
     method: "POST",
     body: JSON.stringify({ phone, code }),
   });
 }
 
 export interface OrderInput {
-  token: string;
+  bookingToken: string;
   format: ProductFormat;
-  name: string;
-  phone: string;
+  buyerName: string;
   address?: string;
   postalCode?: string;
 }
@@ -43,14 +50,22 @@ export interface OrderInput {
 export function createOrder(input: OrderInput) {
   return apiFetch<{ orderId: string }>("/orders", {
     method: "POST",
-    body: JSON.stringify(input),
+    body: JSON.stringify({
+      bookingToken: input.bookingToken,
+      format: FORMAT_CODE[input.format],
+      buyerName: input.buyerName,
+      address: input.address,
+      postalCode: input.postalCode,
+    }),
   });
 }
 
-export function payOrder(orderId: string) {
-  return apiFetch<{ paymentUrl: string }>(`/orders/${orderId}/pay`, {
+export async function payOrder(orderId: string): Promise<{ paymentUrl: string }> {
+  const result = await apiFetch<{ paymentUrl?: string; error?: string }>(`/orders/${orderId}/pay`, {
     method: "POST",
   });
+  if (!result.paymentUrl) throw new Error(result.error ?? "امکان اتصال به درگاه پرداخت نبود");
+  return { paymentUrl: result.paymentUrl };
 }
 
 export function getOrderStatus(orderId: string) {
