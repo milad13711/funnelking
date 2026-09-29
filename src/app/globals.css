@@ -1,0 +1,158 @@
+@import "tailwindcss";
+@import "@fontsource-variable/vazirmatn/wght.css";
+
+:root {
+  /* زمینه‌ی اصلی سفید؛ پالت برند: سبز اصلی 254C41 و طلایی B49B6D */
+  --background: #ffffff;
+  --foreground: #1a362e;
+
+  --color-ink: #1a362e;
+  --color-ink-soft: #3f564e;
+  --color-muted: #62766f;
+  --color-surface: #ffffff;
+  --color-border: #e4e9e6;
+
+  --color-primary: #254c41;
+  --color-primary-dark: #1a362e;
+  --color-primary-deep: #17302a;
+  --color-primary-light: #3d6b5c;
+  --color-primary-soft: #eaf0ed;
+
+  --color-accent: #254c41;
+  --color-accent-soft: #f6f2e9;
+  --color-gold: #b49b6d;
+  --color-gold-light: #c9b48c;
+  --color-gold-dark: #96805a;
+
+  --color-warning: #8a5a00;
+  --color-warning-soft: #f6efc4;
+
+  --color-danger: #a12525;
+  --color-danger-soft: #f7e3dc;
+
+  --color-success: #0a6b3a;
+  --color-success-soft: #dcecd0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-muted: var(--color-muted);
+  --color-surface: var(--color-surface);
+  --color-border: var(--color-border);
+  --color-primary: var(--color-primary);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-primary-deep: var(--color-primary-deep);
+  --color-primary-light: var(--color-primary-light);
+  --color-gold: var(--color-gold);
+  --color-gold-light: var(--color-gold-light);
+  --color-gold-dark: var(--color-gold-dark);
+  --color-primary-soft: var(--color-primary-soft);
+  --color-accent: var(--color-accent);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-warning: var(--color-warning);
+  --color-warning-soft: var(--color-warning-soft);
+  --color-danger: var(--color-danger);
+  --color-danger-soft: var(--color-danger-soft);
+  --color-success: var(--color-success);
+  --color-success-soft: var(--color-success-soft);
+  --font-sans: "Vazirmatn Variable", Tahoma, "Segoe UI", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3 { text-wrap: balance; }
+
+:focus-visible {
+  outline: 2.5px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--color-gold);
+  color: var(--color-primary-deep);
+  padding: 0.6rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 0.75rem; }
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-lift:hover {
+  transform: translateY(-3px);
+  border-color: rgba(37, 76, 65, 0.35);
+  box-shadow: 0 24px 48px -28px rgba(26, 54, 46, 0.35);
+}
+
+.elev-1 { box-shadow: 0 1px 2px rgba(26, 54, 46, 0.05), 0 8px 24px -16px rgba(26, 54, 46, 0.18); }
+.elev-2 { box-shadow: 0 2px 4px rgba(26, 54, 46, 0.05), 0 24px 56px -28px rgba(26, 54, 46, 0.35); }
+
+.bg-dots {
+  background-image: radial-gradient(rgba(37, 76, 65, 0.09) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.reveal { animation: reveal-up 0.6s ease-out both; }
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.text-gold-gradient {
+  background: var(--color-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-band {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #17302a 0%, #1e3f36 55%, #254c41 100%);
+  color: #fff;
+}
+.hero-band::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--color-gold);
+}
