@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { HideOnAdmin } from "@/components/HideOnAdmin";
 import { BRAND } from "@/lib/content";
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://funnelking.ir").replace(/\/$/, "");
@@ -71,14 +72,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="fa" dir="rtl" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-background text-ink">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(bookJsonLd) }} />
-        <a href="#main" className="skip-link">
-          رفتن به محتوای اصلی
-        </a>
-        <SiteHeader />
+        <HideOnAdmin>
+          <a href="#main" className="skip-link">
+            رفتن به محتوای اصلی
+          </a>
+          <SiteHeader />
+        </HideOnAdmin>
         <div id="main" className="flex-1 flex flex-col">
           {children}
         </div>
-        <SiteFooter />
+        <HideOnAdmin>
+          <SiteFooter />
+        </HideOnAdmin>
       </body>
     </html>
   );

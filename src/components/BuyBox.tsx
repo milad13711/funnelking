@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import clsx from "clsx";
+import Link from "next/link";
 import { PRODUCT_LIST, type ProductFormat } from "@/lib/content";
+import type { Storefront } from "@/lib/storefront";
 import { createOrder, getOrderStatus, payOrder, requestOtp, verifyOtp } from "@/lib/checkout";
 
 type Step = "select" | "details" | "otp" | "submitting" | "redirecting" | "error";
@@ -11,7 +14,8 @@ function formatToman(n: number) {
   return n.toLocaleString("fa-IR") + " تومان";
 }
 
-export function BuyBox() {
+export function BuyBox({ prices, paymentMethod }: { prices: Storefront["prices"]; paymentMethod: Storefront["paymentMethod"] }) {
+  const router = useRouter();
   const [format, setFormat] = useState<ProductFormat>("print");
   const [step, setStep] = useState<Step>("select");
   const [name, setName] = useState("");
@@ -23,6 +27,7 @@ export function BuyBox() {
   const [loading, setLoading] = useState(false);
 
   const product = PRODUCT_LIST.find((p) => p.id === format)!;
+  const priceOf = (id: ProductFormat) => prices[id];
 
   async function handleDetailsSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -57,13 +62,19 @@ export function BuyBox() {
     setStep("submitting");
     try {
       const { bookingToken } = await verifyOtp(phone.trim(), otp.trim());
-      const { orderId } = await createOrder({
+      const { orderId, paymentMethod: method } = await createOrder({
         bookingToken,
         format,
         buyerName: name.trim(),
         address: product.needsShipping ? address.trim() : undefined,
         postalCode: product.needsShipping ? postalCode.trim() : undefined,
       });
+      if (method === "CARD") {
+        // کارت‌به‌کارت: صفحه‌ی اختصاصی پرداخت (قابل‌بازگشت با لینک سفارش)
+        setStep("redirecting");
+        router.push(`/pay/${orderId}`);
+        return;
+      }
       const { paymentUrl } = await payOrder(orderId);
       setStep("redirecting");
       // Confirm the order actually reached a payable state before leaving the page.
@@ -103,7 +114,7 @@ export function BuyBox() {
               </span>
             )}
             <div className="text-sm font-bold text-primary">{p.title}</div>
-            <div className="tabular mt-1 text-lg font-black text-ink">{formatToman(p.price)}</div>
+            <div className="tabular mt-1 text-lg font-black text-ink">{formatToman(priceOf(p.id))}</div>
             <div className="mt-1 text-xs text-muted">{p.blurb}</div>
           </button>
         ))}
@@ -115,7 +126,7 @@ export function BuyBox() {
           onClick={() => setStep("details")}
           className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-white transition hover:bg-primary-dark"
         >
-          ادامه‌ی خرید — {formatToman(product.price)}
+          ادامه‌ی خرید — {formatToman(priceOf(product.id))}
         </button>
       )}
 
@@ -198,15 +209,25 @@ export function BuyBox() {
             disabled={step !== "otp" || loading}
             className="w-full rounded-xl bg-gold py-3 text-sm font-bold text-primary-deep transition hover:brightness-95 disabled:opacity-60"
           >
-            {step === "otp" && "پرداخت و ثبت سفارش"}
+            {step === "otp" && (paymentMethod === "CARD" ? "ثبت سفارش و مشاهده‌ی اطلاعات واریز" : "پرداخت و ثبت سفارش")}
             {step === "submitting" && "در حال ثبت سفارش…"}
-            {step === "redirecting" && "انتقال به درگاه پرداخت…"}
+            {step === "redirecting" && (paymentMethod === "CARD" ? "انتقال به صفحه‌ی واریز…" : "انتقال به درگاه پرداخت…")}
           </button>
         </form>
       )}
 
       <p className="mt-4 text-center text-[11px] text-muted">
-        پرداخت امن از طریق درگاه زرین‌پال · نسخه‌ی الکترونیکی و صوتی بلافاصله بعد از پرداخت ارسال می‌شود.
+        {paymentMethod === "CARD"
+          ? "پرداخت کارت‌به‌کارت · بعد از تأیید واریز، لینک دانلود نسخه‌ی اختصاصی شما پیامک می‌شود."
+          : "پرداخت امن از طریق درگاه زرین‌پال · نسخه‌ی الکترونیکی بلافاصله بعد از پرداخت به نام شما صادر می‌شود."}
+        {" "}
+        <Link href="/library" className="font-semibold text-primary hover:underline">
+          قبلاً خریده‌اید؟ پنل من
+        </Link>
+        {" · "}
+        <Link href="/verify" className="font-semibold text-primary hover:underline">
+          استعلام لایسنس
+        </Link>
       </p>
     </div>
   );

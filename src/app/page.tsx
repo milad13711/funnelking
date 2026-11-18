@@ -3,6 +3,7 @@ import { BuyBox } from "@/components/BuyBox";
 import { ExercisesSection } from "@/components/ExercisesSection";
 import { EventsSection } from "@/components/EventsSection";
 import { GameSection } from "@/components/GameSection";
+import { getStorefront } from "@/lib/storefront";
 import {
   AUDIENCE,
   BRAND,
@@ -13,7 +14,8 @@ import {
   TOC,
 } from "@/lib/content";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const store = await getStorefront();
   return (
     <>
       {/* Hero */}
@@ -45,6 +47,12 @@ export default function HomePage() {
               >
                 خواندن رایگان فصل اول
               </a>
+              <a
+                href="/verify"
+                className="rounded-full border border-gold/60 px-6 py-3 text-sm font-bold text-gold-light transition hover:bg-white/10"
+              >
+                استعلام لایسنس نسخه‌ی الکترونیک
+              </a>
             </div>
             <p className="mt-6 text-xs text-white/60">
               تألیف: {BRAND.author} · {BRAND.parts} بخش · ISBN {BRAND.isbn}
@@ -52,7 +60,7 @@ export default function HomePage() {
           </div>
 
           <div className="reveal lg:justify-self-end lg:self-start">
-            <BuyBox />
+            <BuyBox prices={store.prices} paymentMethod={store.paymentMethod} />
           </div>
         </div>
       </section>

@@ -47,8 +47,10 @@ export interface OrderInput {
   postalCode?: string;
 }
 
+export type PaymentMethod = "CARD" | "ZARINPAL";
+
 export function createOrder(input: OrderInput) {
-  return apiFetch<{ orderId: string }>("/orders", {
+  return apiFetch<{ orderId: string; paymentMethod: PaymentMethod }>("/orders", {
     method: "POST",
     body: JSON.stringify({
       bookingToken: input.bookingToken,
@@ -70,4 +72,78 @@ export async function payOrder(orderId: string): Promise<{ paymentUrl: string }>
 
 export function getOrderStatus(orderId: string) {
   return apiFetch<{ status: string; paidAt?: string }>(`/orders/${orderId}/status`);
+}
+
+/** ارقام فارسی/عربی → لاتین و حذف فاصله/خط تیره؛ بک‌اند فقط 09xxxxxxxxx را برای OTP می‌پذیرد. */
+export function normalizePhone(input: string): string {
+  const latin = input.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+  let p = latin.replace(/\D/g, "");
+  if (p.startsWith("98")) p = "0" + p.slice(2);
+  return p;
+}
+
+export interface PaymentInfo {
+  orderNo: number;
+  format: "PRINT" | "EBOOK" | "AUDIO";
+  status: "PENDING_PAYMENT" | "AWAITING_CONFIRMATION" | "PAID" | "CANCELLED" | "SHIPPED" | "DELIVERED";
+  buyerName: string;
+  amountToman: number;
+  amountRial: number;
+  expiresAt: string | null;
+  claimedAt: string | null;
+  /** فقط تا وقتی سفارش هنوز قابل‌پرداخت است */
+  card: { number: string; holder: string; bank: string } | null;
+}
+
+export function getPaymentInfo(orderId: string) {
+  return apiFetch<PaymentInfo>(`/orders/${orderId}/payment`);
+}
+
+/** «واریز کردم» — سفارش به صف تأیید مدیر می‌رود. */
+export function claimTransfer(orderId: string, input: { payerCardLast4?: string; trackingCode?: string }) {
+  return apiFetch<PaymentInfo>(`/orders/${orderId}/claim`, {
+    method: "POST",
+    body: JSON.stringify({
+      ...(input.payerCardLast4 ? { payerCardLast4: input.payerCardLast4 } : {}),
+      ...(input.trackingCode ? { trackingCode: input.trackingCode } : {}),
+    }),
+  });
+}
+
+export function cancelOrder(orderId: string) {
+  return apiFetch<{ ok: true }>(`/orders/${orderId}/cancel`, { method: "POST" });
+}
+
+export interface LibraryItem {
+  orderNo: number;
+  format: "PRINT" | "EBOOK" | "AUDIO";
+  status: PaymentInfo["status"];
+  unitPrice: number;
+  createdAt: string;
+  paidAt: string | null;
+  licenseCode: string | null;
+  ready: boolean;
+  pageUrl: string | null;
+  pdfUrl: string | null;
+  epubUrl: string | null;
+  expiresAt: string | null;
+}
+
+/** نسخه‌های الکترونیک خریداری‌شده با این شماره (توکن از verifyOtp)، با لینک‌های دانلود تازه. */
+export function fetchLibrary(bookingToken: string) {
+  return apiFetch<LibraryItem[]>("/library", {
+    method: "POST",
+    body: JSON.stringify({ bookingToken }),
+  });
+}
+
+export type LicenseCheck =
+  | { valid: false }
+  | { valid: true; orderNo: number; holderName: string; holderPhone: string; issuedAt: string };
+
+export function verifyLicense(input: { orderNo: number; phone: string; code: string }) {
+  return apiFetch<LicenseCheck>("/license/verify", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
 }

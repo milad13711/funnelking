@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { BRAND } from "@/lib/content";
 
 export function SiteFooter() {
@@ -35,6 +36,12 @@ export function SiteFooter() {
             </li>
             <li>
               <a href="#faq" className="hover:text-primary">پرسش‌های رایج</a>
+            </li>
+            <li>
+              <Link href="/library" className="hover:text-primary">کتابخانه‌ی من (دریافت دوباره‌ی نسخه‌ی الکترونیک)</Link>
+            </li>
+            <li>
+              <Link href="/verify" className="hover:text-primary">استعلام اصالت نسخه</Link>
             </li>
             <li>
               <a href="https://thisismbahrami.ir" className="hover:text-primary">

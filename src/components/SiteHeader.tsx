@@ -25,12 +25,20 @@ export function SiteHeader() {
           <a href="#faq" className="transition hover:text-primary">پرسش‌های رایج</a>
         </nav>
 
-        <a
-          href="#buy"
-          className="rounded-full bg-gold px-4 py-2 text-sm font-bold text-primary-deep transition hover:brightness-95"
-        >
-          خرید کتاب
-        </a>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/verify"
+            className="rounded-full border border-primary/30 px-3 py-2 text-xs font-bold text-primary transition hover:bg-primary-soft sm:px-4 sm:text-sm"
+          >
+            استعلام لایسنس
+          </Link>
+          <Link
+            href="/#buy"
+            className="rounded-full bg-gold px-4 py-2 text-sm font-bold text-primary-deep transition hover:brightness-95"
+          >
+            خرید کتاب
+          </Link>
+        </div>
       </div>
     </header>
   );
