@@ -4,7 +4,6 @@ import { useState } from "react";
 import { normalizePhone, verifyLicense, type LicenseCheck } from "@/lib/checkout";
 
 export function VerifyLicenseForm() {
-  const [orderNo, setOrderNo] = useState("");
   const [phone, setPhone] = useState("");
   const [code, setCode] = useState("");
   const [result, setResult] = useState<LicenseCheck | null>(null);
@@ -15,15 +14,19 @@ export function VerifyLicenseForm() {
     e.preventDefault();
     setError(null);
     setResult(null);
-    const order = Number(normalizePhone(orderNo));
-    const p = normalizePhone(phone);
-    if (!order || !/^09\d{9}$/.test(p) || code.trim().length < 16) {
-      setError("شماره سفارش، شماره موبایل خریدار و کد مجوز را کامل وارد کنید.");
+    const p = phone.trim() ? normalizePhone(phone) : "";
+    const c = code.trim();
+    if (!p && !c) {
+      setError("شماره موبایل خریدار یا شناسه‌ی مجوز را وارد کنید (یکی کافی است).");
+      return;
+    }
+    if (p && !/^09\d{9}$/.test(p)) {
+      setError("شماره موبایل را به‌شکل ۰۹xxxxxxxxx وارد کنید.");
       return;
     }
     setLoading(true);
     try {
-      setResult(await verifyLicense({ orderNo: order, phone: p, code: code.trim() }));
+      setResult(await verifyLicense({ ...(p ? { phone: p } : {}), ...(c ? { code: c } : {}) }));
     } catch (err) {
       setError(err instanceof Error ? err.message : "خطای ناشناخته");
     } finally {
@@ -31,22 +34,19 @@ export function VerifyLicenseForm() {
     }
   }
 
-  const input = "w-full rounded-xl border border-border px-3 py-2.5 text-sm outline-none focus:border-primary";
+  const input = "w-full rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-ink placeholder:text-muted/70 outline-none focus:border-primary";
 
   return (
     <div className="rounded-3xl border border-border bg-white p-5 elev-2 sm:p-7">
       <form onSubmit={handleSubmit} className="space-y-3">
         <div>
-          <label className="mb-1 block text-xs font-semibold text-ink-soft">شماره سفارش</label>
-          <input value={orderNo} onChange={(e) => setOrderNo(e.target.value)} inputMode="numeric" dir="ltr" className={`${input} text-right`} placeholder="مثلاً 1024" />
+          <label className="mb-1 block text-xs font-semibold text-ink-soft">شناسه‌ی مجوز</label>
+          <input value={code} onChange={(e) => setCode(e.target.value)} dir="ltr" autoCapitalize="characters" className={`${input} font-mono`} placeholder="FK-XXXX-XXXX-XXXX-XXXX" />
         </div>
+        <p className="text-center text-xs text-muted">— یا —</p>
         <div>
           <label className="mb-1 block text-xs font-semibold text-ink-soft">شماره موبایل خریدار</label>
           <input value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="numeric" dir="ltr" className={`${input} text-right`} placeholder="09xxxxxxxxx" />
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-semibold text-ink-soft">کد مجوز</label>
-          <input value={code} onChange={(e) => setCode(e.target.value)} dir="ltr" autoCapitalize="characters" className={`${input} font-mono`} placeholder="FK-XXXX-XXXX-XXXX-XXXX" />
         </div>
         {error && <p className="text-xs font-medium text-danger">{error}</p>}
         <button type="submit" disabled={loading} className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-white transition hover:bg-primary-dark disabled:opacity-60">
@@ -55,19 +55,28 @@ export function VerifyLicenseForm() {
       </form>
 
       {result?.valid === true && (
-        <div className="mt-5 rounded-2xl border border-green-600/30 bg-green-50 p-4 text-sm text-ink">
-          <p className="font-bold text-green-800">✓ این نسخه اصل است.</p>
-          <p className="mt-2">صادرشده به نام <b>{result.holderName}</b> (<span dir="ltr">{result.holderPhone}</span>)</p>
-          <p className="mt-1 text-xs text-muted">
-            سفارش {result.orderNo.toLocaleString("fa-IR", { useGrouping: false })} ·{" "}
-            {new Date(result.issuedAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" })}
-          </p>
-          <p className="mt-2 text-xs text-muted">نام روی صفحه‌ی مجوز و پانویس فایل باید با همین نام یکی باشد.</p>
+        <div className="mt-5 space-y-3">
+          {result.copies.map((c) => (
+            <div key={c.orderNo} className="rounded-2xl border border-green-600/30 bg-green-50 p-4 text-sm text-ink">
+              <p className="font-bold text-green-800">✓ نسخه‌ی اصل است.</p>
+              <p className="mt-2">
+                صادرشده به نام <b>{c.holderName}</b> (<span dir="ltr">{c.holderPhone}</span>)
+              </p>
+              {c.licenseCode && (
+                <p className="mt-1 text-xs text-muted">
+                  شناسه‌ی مجوز: <span dir="ltr" className="font-mono">{c.licenseCode}</span>
+                </p>
+              )}
+              <p className="mt-1 text-xs text-muted">
+                تاریخ صدور: {new Date(c.issuedAt).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" })}
+              </p>
+            </div>
+          ))}
         </div>
       )}
       {result?.valid === false && (
         <div className="mt-5 rounded-2xl border border-danger/30 bg-danger-soft p-4 text-sm text-danger">
-          این مشخصات با هیچ نسخه‌ی صادرشده‌ای مطابقت ندارد. شماره سفارش، موبایل و کد مجوز را دوباره بررسی کنید.
+          نسخه‌ای با این مشخصات پیدا نشد. شناسه‌ی مجوز یا شماره‌ی موبایل را دوباره بررسی کنید.
         </div>
       )}
     </div>

@@ -55,7 +55,7 @@ export function LibraryPanel() {
     });
   }
 
-  const input = "w-full rounded-xl border border-border px-3 py-2.5 text-sm outline-none focus:border-primary";
+  const input = "w-full rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-ink placeholder:text-muted/70 outline-none focus:border-primary";
 
   return (
     <div className="rounded-3xl border border-border bg-white p-5 elev-2 sm:p-7">

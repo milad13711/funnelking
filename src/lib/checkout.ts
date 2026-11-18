@@ -139,9 +139,10 @@ export function fetchLibrary(bookingToken: string) {
 
 export type LicenseCheck =
   | { valid: false }
-  | { valid: true; orderNo: number; holderName: string; holderPhone: string; issuedAt: string };
+  | { valid: true; copies: { orderNo: number; holderName: string; holderPhone: string; issuedAt: string; licenseCode: string | null }[] };
 
-export function verifyLicense(input: { orderNo: number; phone: string; code: string }) {
+/** فقط شماره موبایل خریدار یا شناسه‌ی مجوز لازم است. */
+export function verifyLicense(input: { phone?: string; code?: string }) {
   return apiFetch<LicenseCheck>("/license/verify", {
     method: "POST",
     body: JSON.stringify(input),

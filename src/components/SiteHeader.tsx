@@ -27,8 +27,14 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <Link
+            href="/library"
+            className="rounded-full border border-primary px-3 py-2 text-xs font-bold text-primary transition hover:bg-primary-soft sm:px-4 sm:text-sm"
+          >
+            ورود / ثبت‌نام
+          </Link>
+          <Link
             href="/verify"
-            className="rounded-full border border-primary/30 px-3 py-2 text-xs font-bold text-primary transition hover:bg-primary-soft sm:px-4 sm:text-sm"
+            className="hidden rounded-full border border-primary/30 px-4 py-2 text-sm font-bold text-primary transition hover:bg-primary-soft md:inline-block"
           >
             استعلام لایسنس
           </Link>

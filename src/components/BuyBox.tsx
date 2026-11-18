@@ -137,7 +137,7 @@ export function BuyBox({ prices, paymentMethod }: { prices: Storefront["prices"]
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-xl border border-border px-3 py-2.5 text-sm outline-none focus:border-primary"
+              className="w-full rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-ink placeholder:text-muted/70 outline-none focus:border-primary"
               placeholder="مثلاً محمدامین بهرامی"
             />
           </div>
@@ -148,7 +148,7 @@ export function BuyBox({ prices, paymentMethod }: { prices: Storefront["prices"]
               onChange={(e) => setPhone(e.target.value)}
               inputMode="numeric"
               dir="ltr"
-              className="w-full rounded-xl border border-border px-3 py-2.5 text-sm outline-none focus:border-primary text-right"
+              className="w-full rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-ink placeholder:text-muted/70 outline-none focus:border-primary text-right"
               placeholder="09xxxxxxxxx"
             />
           </div>
@@ -160,7 +160,7 @@ export function BuyBox({ prices, paymentMethod }: { prices: Storefront["prices"]
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   rows={2}
-                  className="w-full rounded-xl border border-border px-3 py-2.5 text-sm outline-none focus:border-primary"
+                  className="w-full rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-ink placeholder:text-muted/70 outline-none focus:border-primary"
                   placeholder="استان، شهر، خیابان، پلاک، واحد"
                 />
               </div>
@@ -171,7 +171,7 @@ export function BuyBox({ prices, paymentMethod }: { prices: Storefront["prices"]
                   onChange={(e) => setPostalCode(e.target.value)}
                   inputMode="numeric"
                   dir="ltr"
-                  className="w-full rounded-xl border border-border px-3 py-2.5 text-sm outline-none focus:border-primary text-right"
+                  className="w-full rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-ink placeholder:text-muted/70 outline-none focus:border-primary text-right"
                   placeholder="۱۰ رقم"
                 />
               </div>
@@ -198,7 +198,7 @@ export function BuyBox({ prices, paymentMethod }: { prices: Storefront["prices"]
             onChange={(e) => setOtp(e.target.value)}
             inputMode="numeric"
             dir="ltr"
-            className="w-full rounded-xl border border-border px-3 py-2.5 text-center text-lg tracking-[0.4em] outline-none focus:border-primary"
+            className="w-full rounded-xl border border-border bg-white px-3 py-2.5 text-center text-lg tracking-[0.4em] text-ink placeholder:text-muted/70 outline-none focus:border-primary"
             placeholder="----"
             maxLength={6}
             disabled={step !== "otp"}
